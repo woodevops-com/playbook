@@ -57,7 +57,32 @@ sudo vim /opt/aws/amazon-cloudwatch-agent/bin/config.json
 sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -s -c file:/opt/aws/amazon-cloudwatch-agent/bin/config.json
 ```
 
-### Chec status
+### Check status
 ```
 /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -m ec2 -a status
+```
+
+## WP-CLI
+
+```
+curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+chmod +x wp-cli.phar
+sudo mv wp-cli.phar /usr/local/bin/wp
+```
+
+## CRON
+
+```
+sudo -u www-data crontab -e
+```
+```
+* * * * * /usr/local/bin/wp cron event run --due-now --path=/var/www/wordpress
+```
+
+## NGINX Page Cache
+
+```
+fastcgi_cache_path /usr/share/nginx/fastcgi_cache levels=1:2 keys_zone=WORDPRESS:100m max_size=10g inactive=10m use_temp_path=off;
+fastcgi_cache_key "$scheme$request_method$host$request_uri$cookie_wcml_client_currency";
+fastcgi_ignore_headers Cache-Control Expires Set-Cookie ;
 ```
